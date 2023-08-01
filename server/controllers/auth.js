@@ -14,6 +14,22 @@ module.exports = {
           title: 'Login'
         })
       },
+    postLogin: async (req, res) => {
+        const { email, password } = req.body;
+        const user = await User.findOne({email});
+        console.log(user);
+        if (user === null) {
+            res.status(400).json('User does not exist.');
+        } else {
+            const validPass = bcrypt.compareSync(password, user.password);
+
+            if (validPass) {
+                res.redirect('/');
+            } else {
+                res.status(400).json('Invalid Credentials.');
+            }
+        }
+    },
 
     getSignup: (req, res) => {
         // if (req.user) {
