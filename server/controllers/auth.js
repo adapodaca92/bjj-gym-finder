@@ -1,8 +1,9 @@
 const passport = require('passport')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 const salt = bcrypt.genSaltSync(10);
-// const validator = require('validator')
 const User = require('../models/User')
+// const validator = require('validator')
+
 
 module.exports = {
     getLogin: (req, res) => {
@@ -25,13 +26,14 @@ module.exports = {
     
     postSignup: async (req, res) => {
         console.log(req.body);
-        const { username, password } = req.body;
+        const { username, password, email } = req.body;
         try {
             const userDoc = await User.create({
                 username,
+                email,
                 password: bcrypt.hashSync(password, salt),
             })
-            res.json(userDoc);
+            res.redirect('/login');
         } catch(err) {
             console.log(err);
             res.status(400).json(err);
