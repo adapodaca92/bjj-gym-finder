@@ -26,7 +26,7 @@ module.exports = {
             const validPass = bcrypt.compareSync(password, user.password);
 
             if (validPass && req.session.authorized) {
-                res.redirect('/');
+                res.json(user);
             } else {
                 res.status(400).json('Invalid Credentials.');
             }
