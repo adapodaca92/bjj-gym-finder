@@ -7,12 +7,17 @@ module.exports = {
         res.json(posts);
     },
     createPost: async (req, res) => {
-        const {gymName, location, review} = req.body;
-        const post = await Post.create({
+        try {
+            const {gymName, location, review} = req.body;
+            const post = await Post.create({
             gymName,
             location,
             review,
         });
         res.json(post);
+        } catch(err) {
+            console.log('Error:', err);
+    }
+        
     }
 }
