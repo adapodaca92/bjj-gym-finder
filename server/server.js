@@ -37,9 +37,10 @@ app.use(session({
 // routers
 
 const homeRoutes = require('./routes/homeRoutes');
+const gymPostRoutes = require('./routes/gymPostRoutes');
 
 app.use('/', homeRoutes);
-// app.use('/user', userRoutes);
+app.use('/gymPosts', gymPostRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}...`);
