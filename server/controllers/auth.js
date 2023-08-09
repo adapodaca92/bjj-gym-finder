@@ -22,7 +22,6 @@ module.exports = {
         } else {
             req.session.user = user;
             req.session.authorized = true;
-            console.log(req.session);
             const validPass = bcrypt.compareSync(password, user.password);
 
             if (validPass && req.session.authorized) {
@@ -42,21 +41,27 @@ module.exports = {
         })
       },
     
-    postSignup: async (req, res) => {
-        console.log(req.body);
-        const { username, password, email } = req.body;
+      postSignup: async (req, res) => {
         try {
-            const userDoc = await User.create({
-                username,
-                email,
-                password: bcrypt.hashSync(password, salt),
-            })
-            res.redirect('/login');
+          const { email, password } = req.body;
+    
+          if (!email || !password) {
+            return res.status(400).json('Both email and password are required.');
+          }
+    
+          const hashedPassword = bcrypt.hashSync(password, salt);
+          
+          const user = await User.create({
+            email,
+            password: hashedPassword,
+          });
+    
+          res.json(user);
         } catch(err) {
-            console.log(err);
-            res.status(400).json(err);
+          console.error(err);
+          res.status(400).json('An error occurred during registration.');
         }
-      }
+    }
 }
 
   
